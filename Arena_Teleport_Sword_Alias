@@ -1,0 +1,21 @@
+Pattern: escape
+
+Execute the following javascript:
+
+    gwc.connection.send("get sword form scabbard");
+    gwc.connection.send("unwield all");
+    gwc.connection.send("remove shields");
+    gwc.connection.send("release all");
+    gwc.connection.send("wield decorative sword");
+    gwc.connection.send("command usque ad mortem");
+  
+      function rewield() {
+        
+      gwc.connection.send("unwield decorative sword");
+      gwc.connection.send("sheathe decorative sword");
+      gwc.connection.send("wield swords");
+  
+      }
+      
+      setTimeout(rewield, 10000);
+
