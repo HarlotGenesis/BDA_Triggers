@@ -1,0 +1,7 @@
+Name: autojoin
+Type: regexp
+Pattern: (Qwer|Harlot|Kilrayne) invites you to join (his|her) team
+
+Execute the following javascript:
+  gwc.connection.send('!team leave');
+  gwc.connection.send("!join " + args[1]);
