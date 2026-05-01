@@ -1,0 +1,43 @@
+Pattern: idle
+
+Execute the following javascript:
+
+  // Initialize userdata idle state if it doesn't exist
+  if (typeof gwc.userdata.idle === "undefined") {
+      gwc.userdata.idle = -1; // Default to not idling
+  }
+  
+  // Initialize userdata teaseInterval if it doesn't exist
+  if (typeof gwc.userdata.teaseInterval === "undefined") {
+      gwc.userdata.teaseInterval = null; // No interval initially
+  }
+  
+  // Toggle idle state
+  if (gwc.userdata.idle === -1) {
+      gwc.userdata.idle = 1; // Switch to idling
+      gwc.output.append("...Idling...");
+      gwc.output.color("blue");
+      gwc.trigger.disable('Warlock Uralane ReCast');
+      gwc.trigger.disable('Warlock Urgahash ReCast');
+      gwc.trigger.disable('Warlock Urgahash ReFlare');
+      // Start sending the 'tease' command every 3 minutes
+      gwc.userdata.teaseInterval = setInterval(() => {
+          gwc.connection.send('tease');
+          gwc.output.append("Teasing...");
+          gwc.output.color("green");
+      }, 180000); // 3 minutes in milliseconds
+  } else {
+      gwc.userdata.idle = -1; // Switch to not idling
+      gwc.output.append("...Idle Off...");
+      gwc.output.color("blue");
+      gwc.trigger.enable('Warlock Uralane ReCast');
+      gwc.trigger.enable('Warlock Urgahash ReCast');
+      gwc.trigger.enable('Warlock Urgahash ReFlare');
+      // Stop the 'tease' interval if it exists
+      if (gwc.userdata.teaseInterval) {
+          clearInterval(gwc.userdata.teaseInterval);
+          gwc.userdata.teaseInterval = null;
+      }
+  }
+  
+// Put in your own re-cast trigger names to not waste ingredients!
