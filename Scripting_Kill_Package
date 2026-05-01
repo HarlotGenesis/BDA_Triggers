@@ -1,0 +1,274 @@
+Pattern: k_next
+
+Execute the following javascript:
+
+  gwc.userdata.kills = gwc.userdata.kills || {};
+    var k = gwc.userdata.kills;
+   if (k.step >= k.plan.length) {
+  gwc.connection.send("k_stop", true);
+    }
+   
+   k.got = 0;
+   k.step += 1;
+   if (k.step >= k.plan.length) {
+     gwc.connection.send("k_stop", true);
+      return;
+    }
+    
+    for(var i = 0; i < k.plan[k.step].path.length; i += 1) {
+      gwc.connection.send(k.plan[k.step].path[i]);
+      gwc.userdata.my_last = k.plan[k.step].path[i];
+    }
+    
+    gwc.connection.send("k_start", true);
+  gwc.userdata.kills = gwc.userdata.kills || {};
+
+Pattern: k_start
+
+Execute the following javascript:
+
+    gwc.userdata.killss = gwc.userdata.kills || {};
+    var k = gwc.userdata.kills;
+    if (!k.plan){
+      gwc.output.append("not killing");
+      return;
+    }
+    gwc.output.append('step:' + k.step);
+     function killy() {
+          gwc.connection.send("kill " + k.plan[k.step].kill);
+    
+      }
+      
+      setTimeout(killy, 200);
+  
+  
+    gwc.userdata.kills = gwc.userdata.kills || {};
+  var k = gwc.userdata.kills;
+  
+  // Check and save the current progress
+  if (k.plan && k.step !== undefined) {
+    gwc.userdata.laststep = {
+      plan: k.plan,  // Save the entire plan
+      step: k.step   // Save the current step index
+    };
+    gwc.output.append('Progress saved at step ' + k.step + '.');
+  } else {
+    gwc.output.append('No active plan to stop.');
+  }
+  
+  // Cleanup after saving progress
+  delete gwc.userdata.kills;
+  gwc.output.append('Killing stopped.');
+  gwc.connection.send("ALARM", true);
+
+Pattern: k_resume
+
+Execute the following javascript:
+
+  // Ensure userdata structure exists
+  gwc.userdata.laststep = gwc.userdata.laststep || {};
+  var laststep = gwc.userdata.laststep;
+  
+  if (laststep.plan && laststep.step !== undefined) {
+    // Resume the saved plan
+    gwc.userdata.kills = { 
+      plan: laststep.plan, 
+      step: laststep.step + 1, // Increment step to avoid repetition
+      got: 0 
+    };
+  
+    // Check if we've already completed the plan
+    if (gwc.userdata.kills.step >= gwc.userdata.kills.plan.length) {
+      gwc.output.append("No more steps to resume. Plan is complete.");
+      return;
+    }
+  
+    gwc.output.append("Resuming from step " + gwc.userdata.kills.step + "...");
+    
+    // Send the next commands
+    for (var i = 0; i < gwc.userdata.kills.plan[gwc.userdata.kills.step].path.length; i += 1) {
+      gwc.connection.send(gwc.userdata.kills.plan[gwc.userdata.kills.step].path[i]);
+    }
+    gwc.connection.send("k_start", true);
+  } else {
+    gwc.output.append("No saved progress found. Start a plan first.");
+  }
+  
+
+Name: akill1
+Type: plain
+Pattern: died.
+
+Execute the following javascript:
+
+  gwc.userdata.kills = gwc.userdata.kills || {};
+  
+  function killer() 
+  {
+      if (!gwc.userdata.kills.plan)
+      {
+          gwc.output.append("not killing");
+          return;
+      }
+      
+      var k = gwc.userdata.kills;
+      
+      if (k.check) 
+      {
+          k.check.paths[k.check.paths.length] = k.check.last.concat(k.plan[k.step].path);
+          k.check.last = [];
+      }
+  
+       k.got += 1;
+       
+      if (k.got >= k.per_room) 
+      {
+          gwc.connection.send("k_next", true);
+          return;
+      }
+      gwc.connection.send("k_start", true);
+  }
+    
+  setTimeout(killer, 100);
+
+Name: akill2
+Type: regexp
+Pattern: (?:He looks so peaceful|prepares to throw an icy glass brew|You sense a divine force preventing your attack.|a divine force protecting the travelling muscular|Attack flying dragon|You feel a divine force protecting the travelling muscular blacksmith; your attack fails.|You try and catch up to the movements of|requires an exclamation mark|Someone hides|he darts away, his cloak billowing|darts through the crowd and into a narrow alley|Kill what?|as he is in your team.|as she is in your team.|are fighting each other.|You find no such living creature.|ancient grimoire|The ferry master is not worthy of your attention.)
+
+Execute the following javascript:
+
+  gwc.connection.send("k_next", true);
+
+Name: akill3
+Type: plain
+Pattern: in the name of the
+
+Execute the following javascript:
+
+    gwc.output.color("purple");
+    gwc.connection.send("k_stop", true);
+
+Pattern: k_home
+
+Execute the following javascript:
+
+      gwc.userdata.kills = gwc.userdata.kills || {};
+              var k = gwc.userdata.kills;
+              //what NPC to kill
+              var kn = 'guard';
+              //how many kills per room
+              k.per_room = 8;
+              //path:steps to take to next room
+              //herb:take which herb from the room
+            k.plan = [
+                  {path:['w','w','w','n','n','w','w','w','w','w','n','n','n','n','nw',],kill:'_throtyl_npc_'},
+               {path:['ne','n','n','nw','n','n','nw','nw','n'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w','w','w'],kill:'_throtyl_npc_'},  
+  {path:['l'],kill:'moorsman'},               
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['s'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w','n','n'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['n'],kill:'_throtyl_npc_'},    
+    {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['l'],kill:'moorsman'},
+    {path:['e','e','n'],kill:'_throtyl_npc_'}, 
+  {path:[''],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['n'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['w'],kill:'_throtyl_npc_'},
+  {path:['l'],kill:'moorsman'},
+    {path:['e','e','n'],kill:'_throtyl_npc_'},  
+  {path:['l'],kill:'moorsman'},
+    
+    {path:['s','s','s','w','w','w','w','nw'],kill:'_throtyl_npc_'},
+    {path:['nw'],kill:'_throtyl_npc_'},
+    {path:['n'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['n'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['e','e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['n'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    
+    {path:['n'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['e'],kill:'_throtyl_npc_'},
+    {path:['w','n'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    {path:['w'],kill:'_throtyl_npc_'},
+    
+    {path:['s','s','se','e','se','se','se','se','se','se','s','se','se','s','s'],kill:'_throtyl_npc_'},
+    {path:['se','s','s','sw','se','s','s','s','s','s','s','s','se'],kill:''},
+    {path:['sharpen weapon','sharpen second weapon','fix armour','fix second armour','fix third armour','fix fourth armour','fix fifth armour','fix sixth armour','fix seventh armour','fix eigth armour'],kill:''},
+    {path:['out','e','e','e','e','e','n','n','w','w','u','s'],kill:''},
+              ];
+              k.got = 0;
+              k.step = -1;
+              
+              gwc.connection.send("k_next", true);
+  
+  
