@@ -1,0 +1,30 @@
+pattern:
+
+^(?:The\s+(.?)|(.+?))\s+are fighting each other.$
+
+javascript trig:
+
+  let text = args[0]; 
+
+  // 1. Your exclusion list (keep lowercase)
+  const excludedPlayers = ["dravian", "qwer"];
+
+  // 2. Use your original regex to capture the entire "who" group
+  let match = text.match(/^(?:The\s+(.?)|(.+?))\s+are fighting each other./);
+
+  if (match) {
+      let allFighters = match[1] ? match[1] : match[2];
+      let lowerFighters = allFighters.toLowerCase();
+
+      // 3. Logic: Check if ANY of your excluded players are in the string
+      // This uses .some() to see if at least one name is present
+      let isExcluded = excludedPlayers.some(name => lowerFighters.includes(name));
+
+      if (!isExcluded) {
+          document.getElementById('communication')
+              .append("FIGHT: " + allFighters + "\n");
+      }
+  }
+
+  // Advance script  (or whatever your advance script is)
+  gwc.connection.send("h_next", true); 
