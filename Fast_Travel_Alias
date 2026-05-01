@@ -1,0 +1,224 @@
+Pattern: go
+
+Execute the following javascript:
+  const oppositeDirections = { 'n':'s', 's':'n', 'e':'w', 'w':'e',
+     'ne':'sw', 'nw':'se', 'se':'nw', 'sw':'ne', 'u':'d', 'd':'u', 
+     'in':'out', 'out':'in', 'sail e':'sail w', 'sail w':'sail e', 
+     'sail n':'sail s', 'sail s':'sail n', 'sail ne':'sail sw', 
+     'sail sw':'sail ne', 'sail nw':'sail se', 'sail se':'sail nw', 
+     'knock on gate':'knock on gate', 'enter hole':'enter hole' }; 
+    
+    if (!args[1]) { 
+      gwc.output.append("No destination provided. Please specify where you want to go."); 
+      gwc.output.color("cornflowerblue"); gwc.output.color("cornflowerblue"); 
+      gwc.output.append("Grey Havens to Bree Center <bree>"); 
+      gwc.output.append("Bree East Gate to Trollshaws <ts>"); 
+      gwc.output.append("Roundabout to EUT <eut>"); 
+      gwc.output.append("Wagon to Goliath <kabal>"); 
+      gwc.output.append("Roc to Tyr Wagon <tyr>"); 
+      gwc.output.append("Pelagrir to Cair Andros <ca>"); 
+      gwc.output.append("Sparkle Pier to MacDunn Plains <loco>");
+      gwc.output.append("Sparkle Pier to kabal sewer <sewer>");
+      gwc.output.append("Ten Alders to Gont <gont>");
+      gwc.output.append("Raumdor Smith to Vallaki x roads <val>");
+      gwc.output.append("BDA start to Garren <garren>");
+      gwc.output.append("BDA start to Throtyl Pass <throt>");
+      gwc.output.append("Throtyl Pass to Kalaman <kala>");
+      gwc.output.append("Garren to Blue Troll Camp <btroll>");
+      gwc.output.append("Sparkle Pier to Raumdor Smith <rasm>");
+      gwc.output.append("Vallaki Gates to Lich <lich>");
+      gwc.output.append("Vallaki Gates to Drakmere <drak>");
+      gwc.output.append("To Reverse: go <location> back, or <go back> to reverse last path"); 
+      road = ['']; } else 
+    { 
+    switch (args[1]) 
+    { 
+    case 'eut': // Center of Roundabout to the Edoral Underground TUnnels 
+      gwc.output.append("Let's go to EUT"); 
+      gwc.output.color("cornflowerblue"); 
+      road = ['e','e','e','e','se','e','e','e','ne','e','se','e','se','e', 
+             'ne','e','se','se','u','e','u','u','se','d','d','e','d','e','e','n',
+             'nw','nw', 'u','n','n','climb boulder','enter waterfall','climb up' ]; 
+    break; 
+    case 'kabal': // Wagon Station in Tyr to Goliath outside of Kabal 
+      gwc.output.append("Let's go to Kabal!"); 
+      gwc.output.color("cornflowerblue"); 
+      road = ['n','w','w','w','w','w','w','w','w','w','w','w','sw','nw','nw',
+             'nw','nw', 'w','w','nw','nw','nw','nw','nw','nw','nw','nw','nw','nw',
+             'nw','nw','nw','nw','nw','nw','nw','nw','w','w','w','w','w','w','w',
+             'nw','nw','nw','nw', 'nw','nw','nw','nw','nw','nw','w','w','w','w',
+             'nw','w','w','w','w','w','w', 'w','w', ]; 
+    break; 
+    case 'loco':
+      gwc.output.append("Let's go herbing for locoweed!"); 
+      gwc.output.color("cornflowerblue"); 
+      road = ['w','n','n','n','n','n','n','n','n','e','e','e','n', 'n','n',
+            'n','n','n','n','n','n','n','n','n','n','w','w','w','w','w',
+            'w','w','w','w','w','w','w','w','w','n']; 
+    break; 
+    case 'bree': // Trollshaws to Center of Bree 
+      gwc.output.append("Let's go to Bree!"); 
+      gwc.output.color("cornflowerblue"); 
+      road = ['e','e','e','e','e','e','e','e','e','e','e','e','e','e','e',
+              'e','e', 'e','ne','e','e','e','e','e','e','e','e','e','e','e','e','e', 
+              'e','e','e','e','e','e','knock on gate','e','e', ]; 
+    break; 
+    case 'tyr': // Trollshaws to Center of Bree 
+      gwc.output.append("Let's go to Tyr!"); 
+      gwc.output.color("cornflowerblue"); 
+      road = [ 'u', 'n', 'ne', 'e', 'se', 'se', 's', 's', 'sw', 's', 's', 'se',
+              'se', 'se', 's', 's', 's', 'se', 's', 'se', 'e', 'se', 'e', 'e', 'e', 
+               'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 's' ]; 
+    break;
+        case 'test': 
+      gwc.output.append("Testing !"); 
+      gwc.output.color("cornflowerblue"); 
+      road = [ 'n', 'e', ]; 
+    break;
+    case 'gont': // Ten Alders to Gont
+     gwc.output.append("Let's go to Gont!"); 
+     gwc.output.color("cornflowerblue"); 
+     road = [ 'sw','sw','nw','sw','sw','sw','sw','se','s',
+               's','e','s','sw','w','se',
+               's','se','se','s',
+              'se','se','s','s','se','se','sw',
+               's','se','s','sw','sw','w','s',
+              'sw','s','sw','sw','sw','s','se',
+              'se','s','sw','sw','w','w','w',
+               'w','w','w','w','sw','sw','sw',
+              'se','sw','s','se','s','s','s','s', ]; 
+    break; 
+    case 'ts': 
+     gwc.output.append("Let's go to the Trollshaws!"); 
+     gwc.output.color("cornflowerblue"); 
+     road = ['s','se','se','knock on gate', 'e','ne','e','e','e','se','e','se','e','e','e','e',
+            'se','ne','e','ne', 'e','e','ne','e','e','ne','e','ne','e','e','e','e',
+            'ne','e','e','e','se','e','e','se', 'e','se','se','se','se','e','ne',
+            'n','n','e','exa bushes', 'enter bushes', ]; 
+    break;
+    case 'ca':
+     gwc.output.append("Let's go to Cair Andros!");
+     gwc.output.color("cornflowerblue");
+     road = [
+        's', 'w', 'w', 'w', 'w', 'w',
+        'n', 'n', 'n', 'n', 'n',
+        'ne', 'ne', 'n', 'n',
+        'knock on gate',
+        'n', 'n', 'ne', 'ne', 'ne', 'ne',
+        'n', 'n', 'n', 'ne', 'n', 'n', 'n',
+        'ne', 'ne', 'ne', 'n', 'ne', 'ne',
+        'e', 'e', 'ne', 'e', 'ne', 'ne','n','n','n','n','n', 'nw', 'nw',
+        'n','n','n','n','n','n','n','n','n','e','e','e','e','e','d'
+      ];
+    break;
+    case 'sewer':  
+      gwc.output.append("Let's go to the Kabal Sewer!"); 
+      gwc.output.color("cornflowerblue"); 
+      road = ['w','w','w','w','w','w','w','n','n','w','w','n','n','n','w','w',
+              'w','w', 'w','w','nw','w','w','w','s','w','n','u','u','u','ne','ne',
+             'ne','enter hole']; 
+     break;
+  case 'val':
+    gwc.output.append("Let's go!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      'e','se','se','e','e','se','se','se','se','e','e',
+      'se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se','se',
+      'e','se','se','se','ne','ne','e','e','e','e','e','se','se'
+    ];
+  
+        break;
+  case 'garren':
+    gwc.output.append("Let's go to Garren!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      's','sw','s',
+      'e','e','e','e','e',
+      'ne','e','n','nw','nw','ne','e','s','e','ne','n','ne','se',
+      'e','e','e','e','e','e','e','e',
+      'n','n','n','n','n','n','n',
+      'nw','nw','w','sw','s','s'
+    ];
+        break;
+  case 'rasm':
+    gwc.output.append("Let's go to Raumdor Smith!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      'e','e','e','e','e','e','e','e','e',
+      'ne','ne','ne',
+      'e','e','e','e','e','e','e','e','e',
+      'ne','ne','ne','ne','ne','ne','ne','ne','ne','ne'
+    ];
+  
+        break;
+  case 'throt':
+    gwc.output.append("Let's go to Throtyl Pass!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      's','sw','s','w','w','w','n','n',
+      'w','w','w','w','w','n','n','n','n',
+      'nw','ne','n','n','nw','n','n','nw','nw','n'
+    ];
+        
+        break;
+  case 'btroll':
+    gwc.output.append("Let's go to Blue Troll Camp!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      'n','n','ne','e','se','se','s','s','s','s','s','s','e','e','e','e','e','e','ne','e','se','e','n','ne','e','ne','se','se','e','se',
+      's','s','s','s','s','s','e','e','se','se','se','se','se','se','sw','sw','s','s','se','s','s','se','e','e','se'
+    ];
+        
+        break;
+  case 'kala':
+    gwc.output.append("Let's go to Kalaman!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      'nw','nw','nw','nw','nw','nw','w','nw','w','w','w','w','w','w',
+      'n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n','n',
+      'e','e','e','e',
+      'se','se','se','se','se',
+      'ne','e','e','se','ne','ne','ne'
+    ];
+  
+        break;
+  case 'lich':
+    gwc.output.append("Let's go to Lich!");
+    gwc.output.color("cornflowerblue");
+    road = [
+      'se','se','se','se','se','se',
+      'e','e','e','e','e','s','s',
+      'w','s','w','w','w','n','d'
+    ];
+  
+        break;
+  case 'drak':
+    gwc.output.append("Let's go to Drakmere!");
+    gwc.output.color("cornflowerblue");
+    road = ['nw','nw','w','w','w','w','w','sw','sw','nw','nw','nw','w','nw','nw','nw','nw','nw','nw','nw','nw','nw','nw',
+          'ne','ne','ne','ne','ne','ne','e','e','e','knock on gate','open gate','e', 'open gate', 'knock on gate'];
+  
+        
+      break;
+    case 'back':
+      gwc.output.append("Go <direction> back"); 
+      gwc.output.color("cornflowerblue");
+      road = gwc.userdata.backroad.reverse().map(direction => oppositeDirections[direction]);
+    break; 
+    default: gwc.output.append("Go where? <<kabal> <eut> <roc>"); 
+      gwc.output.color("cornflowerblue"); 
+      gwc.output.append("Grey Havens to Bree <bree>"); 
+      gwc.output.append("Bree to Trollshaws <ts>"); 
+    break; } }
+    
+    if (args[2] == "back")
+    {
+      road = road.reverse().map(direction => oppositeDirections[direction]);
+    }
+    
+      gwc.userdata.backroad = road;
+    
+     let i = 0; while (i< road.length) { loop(i); i++ } 
+    function loop(i)
+    { 
+    setTimeout(function(){ gwc.connection.send(road[i]); }, 100 * i) }
